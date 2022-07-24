@@ -1,7 +1,7 @@
 FROM node:16-bullseye as client
 RUN apt-get update && apt-get install -y openssl git rsync
 WORKDIR /actual
-ENV USER=partylich
+ENV USER=trevdor
 ENV REPO=actual
 ENV BRANCH=responsive
 # cache invalidation
