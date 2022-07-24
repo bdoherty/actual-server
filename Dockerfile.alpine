@@ -1,10 +1,11 @@
 FROM alpine:3 as client
-RUN apk add --no-cache nodejs yarn npm python3 openssl build-base git
+RUN apk add --no-cache nodejs yarn npm python3 openssl build-base git bash
 WORKDIR /actual
 ENV NODE_ENV=production
 RUN git clone -b responsive https://github.com/partylich/actual.git .
 RUN yarn
-RUN CI=true ./bin/package-browser
+ENV CI=true
+RUN bash ./bin/package-browser
 
 FROM alpine:3 as base
 RUN apk add --no-cache nodejs yarn npm python3 openssl build-base
