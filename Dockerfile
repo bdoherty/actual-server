@@ -4,7 +4,10 @@ WORKDIR /actual
 ENV USER=partylich
 ENV REPO=actual
 ENV BRANCH=responsive
-RUN git clone -b $BRANCH https://github.com/$USER/$REPO.git . && \
+# cache invalidation
+ADD https://api.github.com/repos/$USER/$REPO/git/refs/heads/$BRANCH cache_version
+RUN rm cache_version && \
+    git clone -b $BRANCH https://github.com/$USER/$REPO.git . && \
     yarn
 ENV CI=true
 RUN ./bin/package-browser
