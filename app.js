@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const actuator = require('express-actuator');
 const bodyParser = require('body-parser');
@@ -35,12 +36,16 @@ app.use((req, res, next) => {
   next();
 });
 app.use(
-  express.static(__dirname + '/node_modules/@actual-app/web/build', {
+  express.static(path.normalize(__dirname + '/../actual/packages/desktop-client/build'), {
     index: false
   })
 );
 app.get('/*', (req, res) => {
-  res.sendFile(__dirname + '/node_modules/@actual-app/web/build/index.html');
+  res.sendFile(
+    path.normalize(
+      __dirname + '/../actual/packages/desktop-client/build/index.html'
+    )
+  );
 });
 
 async function run() {
