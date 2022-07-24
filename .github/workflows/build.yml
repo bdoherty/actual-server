@@ -28,7 +28,7 @@ jobs:
         with:
           # Push to Github Container Registry
           images: |
-            ${{ env.REGISTRY }}/${{ github.repository }}
+            ${{ env.REGISTRY }}/partylich/actual-server
           # Creates the following tags:
           # - actual-server:latest
           # - actual-server:1.3
