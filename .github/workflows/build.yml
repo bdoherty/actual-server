@@ -39,6 +39,7 @@ jobs:
           # - actual-server:sha-90dd603
           tags: |
             type=sha
+            type=edge,branch=preview
       - name: Docker meta for Alpine image
         id: alpine-meta
         uses: docker/metadata-action@v4
