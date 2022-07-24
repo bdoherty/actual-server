@@ -18,6 +18,7 @@ FROM node:16-bullseye-slim as prod
 RUN apt-get update && apt-get install -y openssl tini && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=base /app /app
+COPY --from=client /actual/packages/desktop-client/build/ /actual
 COPY . .
 ENTRYPOINT ["/usr/bin/tini","-g",  "--"]
 CMD ["node", "app.js"]
