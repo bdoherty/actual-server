@@ -1,9 +1,13 @@
 FROM node:16-bullseye as client
 RUN apt-get update && apt-get install -y openssl git rsync
 WORKDIR /actual
-RUN git clone -b responsive https://github.com/partylich/actual.git .
-RUN yarn
-RUN CI=true ./bin/package-browser
+ENV USER=partylich
+ENV REPO=actual
+ENV BRANCH=responsive
+RUN git clone -b $BRANCH https://github.com/$USER/$REPO.git . && \
+    yarn
+ENV CI=true
+RUN ./bin/package-browser
 
 FROM node:16-bullseye as base
 RUN apt-get update && apt-get install -y openssl git rsync

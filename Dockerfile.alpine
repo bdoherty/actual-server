@@ -1,9 +1,11 @@
 FROM alpine:3 as client
 RUN apk add --no-cache nodejs yarn npm python3 openssl build-base git bash rsync
 WORKDIR /actual
-ENV NODE_ENV=production
-RUN git clone -b responsive https://github.com/partylich/actual.git .
-RUN yarn
+ENV USER=partylich
+ENV REPO=actual
+ENV BRANCH=responsive
+RUN git clone -b $BRANCH https://github.com/$USER/$REPO.git . && \
+    yarn
 ENV CI=true
 RUN bash ./bin/package-browser
 
