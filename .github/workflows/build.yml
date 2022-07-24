@@ -39,6 +39,15 @@ jobs:
           # - actual-server:sha-90dd603
           tags: |
             type=sha
+      - name: Docker meta for Alpine image
+        id: alpine-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ github.repository }}
+          tags: |
+            type=sha,suffix=-alpine
+            type=edge,suffix=-alpine,branch=preview
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -56,3 +65,15 @@ jobs:
           tags: |
             ${{ steps.meta.outputs.tags }}
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
+      - name: Build and push Alpine image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          file: Dockerfile.alpine
+          platforms:
+            - linux/amd64
+            - linux/arm64
+          tags: |
+            ${{ steps.alpine-meta.outputs.tags }}
+            ${{ env.REGISTRY }}/${{ github.repository }}-alpine:latest
