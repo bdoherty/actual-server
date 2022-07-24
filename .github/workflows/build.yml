@@ -40,6 +40,7 @@ jobs:
           tags: |
             type=sha
             type=edge,branch=preview
+            type=raw,value=preview
       - name: Docker meta for Alpine image
         id: alpine-meta
         uses: docker/metadata-action@v4
@@ -49,6 +50,7 @@ jobs:
           tags: |
             type=sha,suffix=-alpine
             type=edge,suffix=-alpine,branch=preview
+            type=raw,suffix=-alpine,value=preview
       - name: Docker tags
         run: |
           echo "${{ steps.meta.outputs.tags }}"
@@ -69,7 +71,6 @@ jobs:
             linux/amd64
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ${{ env.REGISTRY }}/partylich/actual-server:latest
       - name: Build and push Alpine image
         uses: docker/build-push-action@v2
         with:
@@ -81,4 +82,3 @@ jobs:
             linux/arm64
           tags: |
             ${{ steps.alpine-meta.outputs.tags }}
-            ${{ env.REGISTRY }}/partylich/actual-server-alpine:latest
