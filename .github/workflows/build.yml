@@ -79,6 +79,5 @@ jobs:
           file: Dockerfile.alpine
           platforms: |
             linux/amd64
-            linux/arm64
           tags: |
             ${{ steps.alpine-meta.outputs.tags }}
