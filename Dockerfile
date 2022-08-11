@@ -3,9 +3,9 @@ FROM node:16-bullseye as client
 RUN apt-get update && apt-get install -y openssl git rsync
 WORKDIR /actual
 # Branch info to use for the @actual-app/web build
-ENV USER=trevdor
+ENV USER=bdoherty
 ENV REPO=actual
-ENV BRANCH=responsive
+ENV BRANCH=master
 # cache invalidation. This should return a new value if the commit changes,
 # forcing a rebuild from this step.
 ADD https://api.github.com/repos/$USER/$REPO/git/refs/heads/$BRANCH cache_version
