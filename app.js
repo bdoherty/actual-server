@@ -36,14 +36,14 @@ app.use((req, res, next) => {
   next();
 });
 app.use(
-  express.static(path.normalize(__dirname + '/../actual'), {
+  express.static(path.normalize(__dirname + '/../actual/web'), {
     index: false
   })
 );
 app.get('/*', (req, res) => {
   res.sendFile(
     path.normalize(
-      __dirname + '/../actual/index.html'
+      __dirname + '/../actual/web/index.html'
     )
   );
 });

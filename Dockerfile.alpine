@@ -14,14 +14,18 @@ RUN rm cache_version && \
     yarn
 # CI true skips an unnecessary lint step
 ENV CI=true
-RUN bash ./bin/package-browser
+RUN bash ./bin/package-browser && \
+    cd packages/loot-core; \
+    yarn run build:api; \
+    cp lib-dist/bundle.api* ../api/app;
 
 # build the server with the FE from the previous step
 FROM alpine:3 as base
 RUN apk add --no-cache nodejs yarn npm python3 openssl build-base
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=client /actual/packages/desktop-client/build/ /actual
+COPY --from=client /actual/packages/desktop-client/build/ /actual/web
+COPY --from=client /actual/packages/api/                  /actual/api
 COPY yarn.lock package.json ./
 RUN npm rebuild bcrypt --build-from-source
 RUN yarn install --production

@@ -14,14 +14,18 @@ RUN rm cache_version && \
     yarn
 # CI true skips an unnecessary lint step
 ENV CI=true
-RUN ./bin/package-browser
+RUN ./bin/package-browser && \
+    cd packages/loot-core; \
+    yarn run build:api; \
+    cp lib-dist/bundle.api* ../api/app;
 
 # build the server with the FE from the previous step
 FROM node:16-bullseye as base
 RUN apt-get update && apt-get install -y openssl git rsync
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=client /actual/packages/desktop-client/build/ /actual
+COPY --from=client /actual/packages/desktop-client/build/ /actual/web
+COPY --from=client /actual/packages/api/                  /actual/api
 COPY yarn.lock package.json ./
 RUN npm rebuild bcrypt --build-from-source
 RUN yarn install --production

@@ -12,8 +12,8 @@
     "verify": "yarn -s lint && yarn types"
   },
   "dependencies": {
-    "@actual-app/api": "4.1.0",
-    "@actual-app/web": "../actual",
+    "@actual-app/api": "../actual/api",
+    "@actual-app/web": "../actual/web",
     "adm-zip": "^0.5.9",
     "bcrypt": "^5.0.1",
     "better-sqlite3": "^7.5.0",
