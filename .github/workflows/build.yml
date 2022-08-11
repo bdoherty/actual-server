@@ -4,15 +4,14 @@ name: Build Docker Image
 on:
   push:
     branches:
-      - 'preview'
-
+      - 'preview-brendan'
+  # allow manual trigger
+  workflow_dispatch:
 env:
   REGISTRY: ghcr.io
-
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   build:
     name: Build Docker image
@@ -36,15 +35,8 @@ jobs:
           # Push to Github Container Registry
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}
-          # Creates the following tags:
-          # - actual-server:latest
-          # - actual-server:1.3
-          # - actual-server:1.3.7
-          # - actual-server:sha-90dd603
           tags: |
-            type=sha
-            type=edge,branch=preview
-            type=raw,value=preview
+            type=raw,value=preview-bdoh
       - name: Docker meta for Alpine image
         id: alpine-meta
         uses: docker/metadata-action@v4
@@ -52,10 +44,8 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}
           tags: |
-            type=sha,suffix=-alpine
-            type=edge,suffix=-alpine,branch=preview
-            type=raw,suffix=-alpine,value=preview
-      - name: Docker tags
+            type=raw,suffix=-alpine,value=preview-bdoh
+      - name: 'Info: Docker tags'
         run: |
           echo "${{ steps.meta.outputs.tags }}"
           echo "${{ steps.alpine-meta.outputs.tags }}"
@@ -73,8 +63,7 @@ jobs:
           file: Dockerfile
           platforms: |
             linux/amd64
-          tags: |
-            ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
       - name: Build and push Alpine image
         uses: docker/build-push-action@v2
         with:
@@ -83,5 +72,4 @@ jobs:
           file: Dockerfile.alpine
           platforms: |
             linux/amd64
-          tags: |
-            ${{ steps.alpine-meta.outputs.tags }}
+          tags: ${{ steps.alpine-meta.outputs.tags }}
